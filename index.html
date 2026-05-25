@@ -323,7 +323,7 @@ footer{position:relative;z-index:1;padding:1.8rem 7%;border-top:1px solid var(--
   </div>
   <p class="hero-bio">End-to-end product engineer and AI-focused developer with 3+ years of experience — from concept to deployment. I build intelligent, scalable applications across the full stack, integrating Agentic AI, LLMs, and automation to create products that think, adapt, and deliver real value.</p>
   <div class="hero-actions">
-    <a class="btn-glass btn-primary-glass" href="#orion">View Orion Project</a>
+    <button class="btn-glass btn-primary-glass" onclick="downloadCV()">Download CV</button>
     <a class="btn-glass btn-outline-glass" href="#contact">Get In Touch</a>
   </div>
   <div class="hero-stats-card glass">
@@ -655,8 +655,28 @@ footer{position:relative;z-index:1;padding:1.8rem 7%;border-top:1px solid var(--
   }, { passive: true });
   scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-  // ── Orion demo button (placeholder — update href when link is ready)
-  // To update: document.getElementById('orionDemoBtn').href = 'YOUR_GITHUB_PAGES_URL';
+  // ── Download CV
+  function downloadCV() {
+    const cvUrl = 'Viswanadh_Jvs_CV.pdf';
+    fetch(cvUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('CV not found');
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Viswanadh_Jvs_CV.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        alert('CV file not found.');
+      });
+  }
 </script>
 </body>
 </html>
