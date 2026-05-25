@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viswanadh JVS — AI-Focused E2E Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy-deep:#050d1a;--navy-mid:#0a1628;--navy-light:#0f2040;
+  --blue-vivid:#4f9cf9;--blue-soft:#7eb8ff;--cyan:#50e3c2;--gold:#f5c842;--purple:#a78bfa;
+  --glass-bg:rgba(255,255,255,0.055);--glass-bg2:rgba(255,255,255,0.03);
+  --glass-border:rgba(255,255,255,0.13);--glass-border2:rgba(255,255,255,0.07);
+  --text-primary:#e8f0fe;--text-secondary:#8eaacf;--text-dim:#3d5a80;
+}
+html { scroll-behavior: smooth; }
+body { font-family:'Outfit',sans-serif;background:var(--navy-deep);color:var(--text-primary);overflow-x:hidden;min-height:100vh; }
+
+/* ── BG ── */
+.bg-scene { position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
+.orb { position:absolute;border-radius:50%;filter:blur(80px);opacity:0;animation:orbFloat 20s ease-in-out infinite; }
+.orb-1{width:520px;height:520px;background:radial-gradient(circle at 30% 40%,rgba(79,156,249,.22),rgba(79,156,249,.04) 60%,transparent 80%);top:-120px;right:-60px;animation-delay:0s;animation-duration:18s;}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle at 60% 60%,rgba(80,227,194,.18),rgba(80,227,194,.03) 60%,transparent 80%);bottom:10%;left:-80px;animation-delay:-6s;animation-duration:22s;}
+.orb-3{width:300px;height:300px;background:radial-gradient(circle at 50% 50%,rgba(167,139,250,.14),transparent 70%);top:40%;right:20%;animation-delay:-12s;animation-duration:26s;}
+.orb-4{width:250px;height:250px;background:radial-gradient(circle at 50% 50%,rgba(79,156,249,.14),transparent 70%);bottom:20%;right:5%;animation-delay:-4s;animation-duration:20s;}
+@keyframes orbFloat{0%{opacity:1;transform:translate(0,0) scale(1)}25%{transform:translate(30px,-25px) scale(1.05)}50%{transform:translate(-15px,20px) scale(.97)}75%{transform:translate(20px,10px) scale(1.03)}100%{opacity:1;transform:translate(0,0) scale(1)}}
+.stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 15% 20%,rgba(255,255,255,.35) 0%,transparent 100%),radial-gradient(1px 1px at 35% 60%,rgba(255,255,255,.25) 0%,transparent 100%),radial-gradient(1px 1px at 55% 10%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1px 1px at 70% 45%,rgba(255,255,255,.2) 0%,transparent 100%),radial-gradient(1px 1px at 85% 75%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 5% 50%,rgba(126,184,255,.4) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 78% 15%,rgba(80,227,194,.35) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 42% 70%,rgba(167,139,250,.3) 0%,transparent 100%);}
+
+/* ── GLASS ── */
+.glass{background:var(--glass-bg);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-border);}
+.glass-deep{background:rgba(10,22,40,0.65);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid var(--glass-border);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:68px;background:rgba(5,13,26,.7);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--glass-border2);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;letter-spacing:.04em;color:var(--text-primary);text-decoration:none;}
+.nav-logo em{font-style:italic;color:var(--cyan);}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:300;color:var(--text-secondary);text-decoration:none;letter-spacing:.08em;transition:color .25s;position:relative;padding-bottom:2px;}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--cyan);transform:scaleX(0);transition:transform .25s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{transform:scaleX(1);}
+
+/* ── HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;cursor:pointer;border:1px solid var(--glass-border);border-radius:8px;background:var(--glass-bg);backdrop-filter:blur(10px);flex-shrink:0;}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--text-secondary);border-radius:2px;transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* ── MOBILE DRAWER ── */
+.mobile-drawer{position:fixed;top:68px;left:0;right:0;z-index:190;transform:translateY(-110%);transition:transform .35s cubic-bezier(.4,0,.2,1);background:rgba(5,13,26,.95);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid var(--glass-border);padding:1.5rem 5% 2rem;}
+.mobile-drawer.open{transform:translateY(0);}
+.mobile-drawer ul{list-style:none;display:flex;flex-direction:column;gap:.2rem;}
+.mobile-drawer ul li a{display:block;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:300;color:var(--text-secondary);text-decoration:none;letter-spacing:.1em;padding:.9rem 1rem;border-radius:8px;transition:all .2s;}
+.mobile-drawer ul li a:hover,.mobile-drawer ul li a.active{color:var(--cyan);background:rgba(80,227,194,.06);}
+.drawer-overlay{display:none;position:fixed;inset:0;z-index:180;background:transparent;}
+.drawer-overlay.open{display:block;}
+
+/* ── SCROLL TO TOP ── */
+.scroll-top{position:fixed;bottom:2rem;right:1.8rem;z-index:300;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,rgba(79,156,249,.7),rgba(80,227,194,.5));border:1px solid rgba(126,184,255,.35);backdrop-filter:blur(10px);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s,box-shadow .25s;pointer-events:none;}
+.scroll-top.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.scroll-top:hover{box-shadow:0 8px 28px rgba(79,156,249,.35);transform:translateY(-3px);}
+.scroll-top svg{width:16px;height:16px;stroke:#fff;stroke-width:2;}
+
+/* ── HERO ── */
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 8% 0 7%;padding-top:68px;}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,8vw,7.5rem);font-weight:300;line-height:.9;letter-spacing:-.02em;color:var(--text-primary);margin-bottom:.6rem;animation:fadeUp .8s .1s ease both;}
+.hero-name span{display:block;font-weight:600;font-style:italic;background:linear-gradient(120deg,var(--blue-soft) 0%,var(--cyan) 55%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-role{font-family:'JetBrains Mono',monospace;font-size:clamp(.75rem,1.2vw,.9rem);font-weight:300;color:var(--text-secondary);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.6rem;animation:fadeUp .8s .2s ease both;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.8rem;animation:fadeUp .8s .25s ease both;}
+.htag{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:300;padding:.28rem .7rem;border-radius:100px;letter-spacing:.08em;}
+.htag-blue{background:rgba(79,156,249,.1);border:1px solid rgba(79,156,249,.3);color:var(--blue-soft);}
+.htag-cyan{background:rgba(80,227,194,.08);border:1px solid rgba(80,227,194,.25);color:var(--cyan);}
+.htag-purple{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:var(--purple);}
+.htag-gold{background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.25);color:var(--gold);}
+.hero-bio{font-family:'Outfit',sans-serif;font-size:clamp(.95rem,1.5vw,1.08rem);font-weight:300;color:var(--text-secondary);line-height:1.8;max-width:580px;margin-bottom:2.8rem;animation:fadeUp .8s .3s ease both;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .4s ease both;}
+.btn-glass{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:400;letter-spacing:.08em;text-decoration:none;cursor:pointer;border:none;transition:all .25s;}
+.btn-primary-glass{background:linear-gradient(135deg,rgba(79,156,249,.7) 0%,rgba(80,227,194,.5) 100%);border:1px solid rgba(126,184,255,.4);color:#fff;backdrop-filter:blur(10px);}
+.btn-primary-glass:hover{background:linear-gradient(135deg,rgba(79,156,249,.9) 0%,rgba(80,227,194,.7) 100%);transform:translateY(-3px);box-shadow:0 12px 35px rgba(79,156,249,.25);}
+.btn-outline-glass{background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text-primary);backdrop-filter:blur(10px);}
+.btn-outline-glass:hover{border-color:rgba(80,227,194,.4);color:var(--cyan);transform:translateY(-3px);}
+.hero-stats-card{position:absolute;right:7%;top:50%;transform:translateY(-50%);padding:2rem 2.2rem;border-radius:20px;min-width:220px;animation:fadeLeft .9s .5s ease both;}
+.stat-row{margin-bottom:1.8rem;}
+.stat-row:last-child{margin-bottom:0;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;line-height:1;color:var(--text-primary);margin-bottom:.25rem;}
+.stat-val sup{font-size:1.5rem;color:var(--cyan);vertical-align:super;}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:300;color:var(--text-secondary);letter-spacing:.1em;text-transform:uppercase;}
+.stat-divider{height:1px;background:linear-gradient(90deg,var(--glass-border) 0%,transparent 100%);margin:1.5rem 0;}
+
+/* ── SECTIONS ── */
+.section{position:relative;z-index:1;padding:7rem 7%;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:300;color:var(--cyan);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.8rem;}
+.section-label::before{content:'';display:block;width:28px;height:1px;background:var(--cyan);opacity:.6;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:600;line-height:1.1;letter-spacing:-.02em;color:var(--text-primary);margin-bottom:3.5rem;}
+.section-title em{font-style:italic;color:var(--blue-soft);}
+
+/* ── SKILLS ── */
+#skills .skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;}
+#skills .skills-left{display:flex;flex-direction:column;gap:1.2rem;}
+#skills .skill-group{padding:1.6rem 1.8rem;border-radius:16px;transition:border-color .3s,transform .3s;}
+#skills .skill-group:hover{transform:translateX(6px);border-color:rgba(79,156,249,.3);}
+.skill-group-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:400;color:var(--blue-soft);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.skill-group-title::before{content:'//';color:var(--text-dim);font-size:.6rem;}
+.skill-chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:300;padding:.35rem .85rem;border-radius:100px;letter-spacing:.05em;transition:all .2s;cursor:default;}
+.chip-blue{background:rgba(79,156,249,.1);border:1px solid rgba(79,156,249,.25);color:var(--blue-soft);}
+.chip-cyan{background:rgba(80,227,194,.08);border:1px solid rgba(80,227,194,.22);color:var(--cyan);}
+.chip-gold{background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.22);color:var(--gold);}
+.chip-purple{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.22);color:var(--purple);}
+.chip-soft{background:rgba(255,255,255,.05);border:1px solid var(--glass-border2);color:var(--text-secondary);}
+.chip:hover{transform:scale(1.05);}
+.skills-right{display:flex;flex-direction:column;gap:1rem;}
+.competency-bar-card{padding:1.8rem 2rem;border-radius:16px;}
+.comp-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--text-primary);margin-bottom:1.4rem;letter-spacing:.01em;}
+.bar-item{margin-bottom:1.1rem;}
+.bar-item:last-child{margin-bottom:0;}
+.bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.45rem;}
+.bar-name{font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:400;color:var(--text-primary);}
+.bar-pct{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:300;color:var(--text-secondary);}
+.bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:100px;animation:growBar 1.2s .5s ease both;transform-origin:left;}
+@keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fill-blue{background:linear-gradient(90deg,var(--blue-soft),var(--blue-vivid));}
+.fill-cyan{background:linear-gradient(90deg,var(--cyan),rgba(80,227,194,.6));}
+.fill-gold{background:linear-gradient(90deg,var(--gold),rgba(245,200,66,.6));}
+.fill-mixed{background:linear-gradient(90deg,var(--blue-soft),var(--cyan));}
+.fill-purple{background:linear-gradient(90deg,var(--purple),rgba(167,139,250,.6));}
+
+/* ── ORION ── */
+#orion{position:relative;z-index:1;padding:0 7% 7rem;}
+.orion-card{border-radius:24px;padding:3rem;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(10,22,40,.9) 0%,rgba(15,32,64,.85) 100%);border:1px solid rgba(167,139,250,.3);}
+.orion-card::before{content:'';position:absolute;top:-80px;right:-80px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.12) 0%,transparent 70%);}
+.orion-card::after{content:'';position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(80,227,194,.08) 0%,transparent 70%);}
+.orion-inner{position:relative;z-index:1;}
+.orion-top{display:flex;align-items:flex-start;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:2rem;}
+.orion-logo-area{display:flex;align-items:center;gap:1rem;}
+.orion-icon{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,rgba(167,139,250,.25),rgba(80,227,194,.15));border:1px solid rgba(167,139,250,.35);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
+.orion-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--text-primary);line-height:1.1;}
+.orion-sub{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:300;color:var(--purple);letter-spacing:.12em;text-transform:uppercase;margin-top:.2rem;}
+.orion-badge-group{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.orion-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:400;padding:.3rem .8rem;border-radius:100px;letter-spacing:.08em;text-transform:uppercase;}
+.badge-own{background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(80,227,194,.1));border:1px solid rgba(167,139,250,.4);color:var(--purple);}
+.badge-ai{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);color:var(--purple);}
+
+/* Live demo button */
+.btn-demo{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.2rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:400;letter-spacing:.08em;text-decoration:none;cursor:pointer;border:none;transition:all .25s;background:linear-gradient(135deg,rgba(80,227,194,.2),rgba(167,139,250,.15));border:1px solid rgba(80,227,194,.35);color:var(--cyan);}
+.btn-demo:hover{background:linear-gradient(135deg,rgba(80,227,194,.35),rgba(167,139,250,.25));transform:translateY(-2px);box-shadow:0 8px 24px rgba(80,227,194,.2);}
+.btn-demo .demo-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(80,227,194,.5)}50%{box-shadow:0 0 0 5px rgba(80,227,194,0)}}
+
+.orion-desc{font-size:.92rem;font-weight:300;color:var(--text-secondary);line-height:1.8;margin-bottom:2rem;max-width:700px;}
+.orion-use-cases{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:2rem;}
+.use-case{padding:1.4rem 1.6rem;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);transition:border-color .3s,transform .3s;}
+.use-case:hover{border-color:rgba(167,139,250,.3);transform:translateY(-4px);}
+.use-case-icon{font-size:1.3rem;margin-bottom:.6rem;}
+.use-case-title{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;color:var(--text-primary);margin-bottom:.4rem;}
+.use-case-desc{font-size:.78rem;font-weight:300;color:var(--text-secondary);line-height:1.65;}
+.orion-tech{display:flex;flex-wrap:wrap;gap:.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.06);}
+
+/* ── AI FOCUS ── */
+#ai{position:relative;z-index:1;padding:0 7% 7rem;}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.ai-card{padding:1.8rem 1.6rem;border-radius:16px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;}
+.ai-card::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.08) 0%,transparent 70%);}
+.ai-card:hover{transform:translateY(-6px);border-color:rgba(167,139,250,.3);}
+.ai-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:1rem;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);}
+.ai-title{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;color:var(--text-primary);margin-bottom:.5rem;line-height:1.3;}
+.ai-desc{font-size:.78rem;font-weight:300;color:var(--text-secondary);line-height:1.65;}
+
+/* ── EXPERIENCE ── */
+.exp-timeline{position:relative;padding-left:2rem;}
+.exp-timeline::before{content:'';position:absolute;left:0;top:12px;bottom:0;width:1px;background:linear-gradient(to bottom,rgba(79,156,249,.5) 0%,rgba(79,156,249,.05) 100%);}
+.exp-node{position:relative;margin-bottom:2.5rem;}
+.exp-node::before{content:'';position:absolute;left:-2.38rem;top:12px;width:10px;height:10px;border-radius:50%;background:var(--navy-deep);border:2px solid var(--blue-vivid);box-shadow:0 0 14px rgba(79,156,249,.5);}
+.exp-card{padding:2rem 2.2rem;border-radius:18px;transition:border-color .3s,transform .3s;}
+.exp-card:hover{border-color:rgba(79,156,249,.3);transform:translateX(8px);}
+.exp-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.4rem;flex-wrap:wrap;gap:.5rem;}
+.exp-company{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--text-primary);letter-spacing:-.01em;}
+.exp-badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:400;padding:.3rem .8rem;border-radius:100px;letter-spacing:.08em;text-transform:uppercase;}
+.badge-active{background:rgba(80,227,194,.1);border:1px solid rgba(80,227,194,.3);color:var(--cyan);}
+.badge-intern{background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.25);color:var(--gold);}
+.exp-role-line{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:300;color:var(--text-secondary);margin-bottom:1.4rem;letter-spacing:.06em;}
+.exp-role-line span{color:var(--blue-soft);margin-left:.6rem;}
+.exp-points{list-style:none;display:flex;flex-direction:column;gap:.7rem;}
+.exp-points li{font-size:.88rem;font-weight:300;color:var(--text-secondary);line-height:1.7;padding-left:1.4rem;position:relative;}
+.exp-points li::before{content:'◆';position:absolute;left:0;font-size:.45rem;color:var(--blue-vivid);top:.38em;}
+.exp-highlights{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--glass-border2);}
+
+/* ── ACHIEVEMENTS ── */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.ach-card{padding:1.8rem 1.6rem;border-radius:16px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;}
+.ach-card::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(79,156,249,.08) 0%,transparent 70%);}
+.ach-card:hover{transform:translateY(-6px);border-color:rgba(79,156,249,.3);}
+.ach-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:1rem;background:rgba(79,156,249,.1);border:1px solid rgba(79,156,249,.2);}
+.ach-title{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;color:var(--text-primary);margin-bottom:.5rem;line-height:1.3;}
+.ach-desc{font-size:.78rem;font-weight:300;color:var(--text-secondary);line-height:1.65;}
+
+/* ── EDUCATION ── */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.edu-card{padding:2rem 2.2rem;border-radius:18px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;}
+.edu-card:hover{transform:translateY(-5px);border-color:rgba(80,227,194,.3);}
+.edu-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue-vivid),var(--cyan));opacity:0;transition:opacity .3s;}
+.edu-card:hover::after{opacity:1;}
+.edu-degree{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--text-primary);margin-bottom:.4rem;line-height:1.3;}
+.edu-school{font-size:.82rem;font-weight:300;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;}
+.edu-year{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:400;color:var(--gold);letter-spacing:.1em;padding:.3rem .75rem;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:100px;display:inline-block;}
+
+/* ── COMPETENCIES ── */
+#competencies{position:relative;z-index:1;padding:0 7% 7rem;}
+.comp-scroll{display:flex;flex-wrap:wrap;gap:1rem;}
+.comp-pill{display:flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:100px;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:400;color:var(--text-primary);background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(12px);transition:all .25s;cursor:default;}
+.comp-pill:hover{background:rgba(79,156,249,.1);border-color:rgba(79,156,249,.3);color:var(--blue-soft);transform:translateY(-3px);}
+.comp-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
+
+/* ── CONTACT ── */
+#contact{padding:7rem 7%;text-align:center;}
+.contact-card{max-width:700px;margin:0 auto;padding:3.5rem;border-radius:24px;position:relative;overflow:hidden;}
+.contact-card::before{content:'';position:absolute;inset:-1px;border-radius:24px;background:linear-gradient(135deg,rgba(79,156,249,.3),rgba(80,227,194,.15) 50%,rgba(245,200,66,.1));z-index:-1;}
+.contact-card::after{content:'';position:absolute;inset:1px;border-radius:23px;background:rgba(5,13,26,.85);z-index:-1;}
+.contact-heading{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:600;font-style:italic;color:var(--text-primary);margin-bottom:1rem;}
+.contact-sub{font-size:.9rem;font-weight:300;color:var(--text-secondary);line-height:1.7;margin-bottom:2.5rem;max-width:480px;margin-left:auto;margin-right:auto;}
+.contact-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.contact-link{display:flex;align-items:center;gap:.55rem;padding:.75rem 1.5rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:300;color:var(--text-secondary);text-decoration:none;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(12px);transition:all .25s;letter-spacing:.05em;}
+.contact-link:hover{color:var(--text-primary);border-color:rgba(79,156,249,.4);background:rgba(79,156,249,.08);transform:translateY(-3px);}
+.contact-link svg{width:14px;height:14px;opacity:.7;}
+.contact-link:hover svg{opacity:1;}
+
+footer{position:relative;z-index:1;padding:1.8rem 7%;border-top:1px solid var(--glass-border2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-text{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:300;color:var(--text-dim);letter-spacing:.08em;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeLeft{from{opacity:0;transform:translate(24px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--navy-deep);}
+::-webkit-scrollbar-thumb{background:rgba(79,156,249,.3);border-radius:2px;}
+
+/* ── RESPONSIVE ── */
+@media (max-width:1024px) {
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .hero-stats-card{display:none;}
+}
+@media (max-width:900px) {
+  #skills .skills-layout{grid-template-columns:1fr;}
+  .ach-grid,.ai-grid{grid-template-columns:1fr 1fr;}
+  .edu-grid,.orion-use-cases{grid-template-columns:1fr;}
+  .section{padding:5rem 5%;}
+  #hero{padding:5rem 5% 4rem;}
+  #orion,#ai,#competencies{padding-left:5%;padding-right:5%;}
+}
+@media (max-width:600px) {
+  .ach-grid,.ai-grid{grid-template-columns:1fr;}
+  .contact-card{padding:2rem 1.5rem;}
+  .orion-card{padding:1.8rem 1.4rem;}
+  .scroll-top{bottom:1.4rem;right:1.2rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="stars"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Viswanadh <em>JVS</em></a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#orion">Orion</a></li>
+    <li><a href="#ai">AI Focus</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <ul>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#orion">Orion</a></li>
+    <li><a href="#ai">AI Focus</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<!-- HERO -->
+<section id="hero">
+  <h1 class="hero-name">Viswanadh<span>JVS</span></h1>
+  <p class="hero-role">E2E Developer &nbsp;·&nbsp; Agentic AI &nbsp;·&nbsp; Product Builder</p>
+  <div class="hero-tags">
+    <span class="htag htag-blue">Full-Stack Development</span>
+    <span class="htag htag-cyan">Data Visualisation</span>
+    <span class="htag htag-purple">Agentic AI</span>
+    <span class="htag htag-purple">LLM Integration</span>
+    <span class="htag htag-gold">Product Engineering</span>
+    <span class="htag htag-gold">Freelance</span>
+  </div>
+  <p class="hero-bio">End-to-end product engineer and AI-focused developer with 3+ years of experience — from concept to deployment. I build intelligent, scalable applications across the full stack, integrating Agentic AI, LLMs, and automation to create products that think, adapt, and deliver real value.</p>
+  <div class="hero-actions">
+    <a class="btn-glass btn-primary-glass" href="#orion">View Orion Project</a>
+    <a class="btn-glass btn-outline-glass" href="#contact">Get In Touch</a>
+  </div>
+  <div class="hero-stats-card glass">
+    <div class="stat-row"><div class="stat-val">3<sup>+</sup></div><div class="stat-label">Years Experience</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat-row"><div class="stat-val">E2E</div><div class="stat-label">Product Builder</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat-row"><div class="stat-val">AI<sup>∞</sup></div><div class="stat-label">Agentic Focus</div></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="section-label">Technical Skills</div>
+  <h2 class="section-title">My <em>Technical</em> Arsenal</h2>
+  <div class="skills-layout">
+    <div class="skills-left">
+      <div class="skill-group glass reveal">
+        <div class="skill-group-title">Front-End Technologies</div>
+        <div class="skill-chips">
+          <span class="chip chip-blue">Angular</span><span class="chip chip-blue">React</span><span class="chip chip-blue">TypeScript</span><span class="chip chip-blue">JavaScript</span><span class="chip chip-blue">HTML5</span><span class="chip chip-blue">CSS3</span>
+        </div>
+      </div>
+      <div class="skill-group glass reveal" style="transition-delay:.08s">
+        <div class="skill-group-title">Data Visualisation</div>
+        <div class="skill-chips">
+          <span class="chip chip-cyan">D3.js</span><span class="chip chip-cyan">Chart.js</span><span class="chip chip-cyan">ECharts</span><span class="chip chip-cyan">AmCharts</span>
+        </div>
+      </div>
+      <div class="skill-group glass reveal" style="transition-delay:.16s">
+        <div class="skill-group-title">AI &amp; Agentic Technologies</div>
+        <div class="skill-chips">
+          <span class="chip chip-purple">LLM Integration</span><span class="chip chip-purple">Agentic AI</span><span class="chip chip-purple">RAG Pipelines</span><span class="chip chip-purple">Prompt Engineering</span><span class="chip chip-purple">AI Agents</span><span class="chip chip-purple">Knowledge Extraction</span>
+        </div>
+      </div>
+      <div class="skill-group glass reveal" style="transition-delay:.24s">
+        <div class="skill-group-title">APIs &amp; Back-End</div>
+        <div class="skill-chips">
+          <span class="chip chip-gold">GraphQL</span><span class="chip chip-gold">RESTful APIs</span><span class="chip chip-gold">Node.js</span><span class="chip chip-gold">API Integration</span>
+        </div>
+      </div>
+      <div class="skill-group glass reveal" style="transition-delay:.32s">
+        <div class="skill-group-title">Web Engineering Concepts</div>
+        <div class="skill-chips">
+          <span class="chip chip-soft">OOP</span><span class="chip chip-soft">DOM Manipulation</span><span class="chip chip-soft">Code Splitting</span><span class="chip chip-soft">Lazy Loading</span><span class="chip chip-soft">Performance Optimisation</span>
+        </div>
+      </div>
+    </div>
+    <div class="skills-right">
+      <div class="competency-bar-card glass reveal" style="transition-delay:.1s">
+        <div class="comp-title">Proficiency Overview</div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">Angular / React / TypeScript</span><span class="bar-pct">95%</span></div><div class="bar-track"><div class="bar-fill fill-blue" style="width:95%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">Agentic AI &amp; LLM Integration</span><span class="bar-pct">88%</span></div><div class="bar-track"><div class="bar-fill fill-purple" style="width:88%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">Data Visualisation</span><span class="bar-pct">90%</span></div><div class="bar-track"><div class="bar-fill fill-cyan" style="width:90%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">E2E Product Development</span><span class="bar-pct">85%</span></div><div class="bar-track"><div class="bar-fill fill-mixed" style="width:85%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">GraphQL &amp; API Integration</span><span class="bar-pct">85%</span></div><div class="bar-track"><div class="bar-fill fill-blue" style="width:85%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">RAG Pipelines &amp; Knowledge AI</span><span class="bar-pct">82%</span></div><div class="bar-track"><div class="bar-fill fill-purple" style="width:82%"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span class="bar-name">UI/UX &amp; Performance</span><span class="bar-pct">92%</span></div><div class="bar-track"><div class="bar-fill fill-cyan" style="width:92%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORION -->
+<section id="orion">
+  <div class="section-label" style="padding:0 7%">My Own Product</div>
+  <h2 class="section-title" style="padding:0 7%;margin-bottom:2rem">Orion <em>Knowledge Hub</em></h2>
+  <div style="padding:0 7%">
+  <div class="orion-card reveal">
+    <div class="orion-inner">
+      <div class="orion-top">
+        <div class="orion-logo-area">
+          <div class="orion-icon">🔭</div>
+          <div>
+            <div class="orion-name">Orion Knowledge Hub</div>
+            <div class="orion-sub">Fully AI-Based Knowledge Platform</div>
+          </div>
+        </div>
+        <div class="orion-badge-group">
+          <span class="orion-badge badge-own">✦ Founder &amp; Creator</span>
+          <span class="orion-badge badge-ai">100% AI-Driven</span>
+          <a class="btn-demo" href="#" id="orionDemoBtn" target="_blank" rel="noopener">
+            <div class="demo-dot"></div> Try Live Demo
+          </a>
+        </div>
+      </div>
+      <p class="orion-desc">Orion Knowledge Hub is a completely AI-based platform built from the ground up to extract, organise, and surface knowledge on demand. The core concept is to train on pre-loaded content and enable natural-language interaction with that knowledge — making complex information instantly accessible for both students and professionals.</p>
+      <div class="orion-use-cases">
+        <div class="use-case">
+          <div class="use-case-icon">🎓</div>
+          <div class="use-case-title">For Students</div>
+          <div class="use-case-desc">Upload course materials, textbooks, or study notes. Orion trains on pre-loaded content and acts as an intelligent study companion — answering questions, summarising topics, and reinforcing learning through contextual knowledge extraction.</div>
+        </div>
+        <div class="use-case">
+          <div class="use-case-icon">💼</div>
+          <div class="use-case-title">For Professionals</div>
+          <div class="use-case-desc">Upload meeting transcripts and train Orion with that session's knowledge. It surfaces answers to any question about what was discussed, generates structured notes, and extracts key decisions and action items — turning hours of meetings into instant, searchable intelligence.</div>
+        </div>
+      </div>
+      <div class="orion-tech">
+        <span class="chip chip-purple">LLM Integration</span><span class="chip chip-purple">RAG Pipeline</span><span class="chip chip-purple">Knowledge Extraction</span><span class="chip chip-purple">Transcript Training</span><span class="chip chip-cyan">Q&amp;A Engine</span><span class="chip chip-cyan">Auto Note Generation</span><span class="chip chip-blue">React</span><span class="chip chip-blue">TypeScript</span><span class="chip chip-gold">RESTful APIs</span><span class="chip chip-soft">Pre-trained Content</span><span class="chip chip-soft">NLP</span>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- AI FOCUS -->
+<section id="ai" style="padding-top:5rem">
+  <div class="section-label">AI-Focused Development</div>
+  <h2 class="section-title">How I <em>Build with AI</em></h2>
+  <div class="ai-grid">
+    <div class="ai-card glass reveal" style="transition-delay:0s"><div class="ai-icon">🤖</div><div class="ai-title">Building Agents to Automate Development</div><div class="ai-desc">Actively building AI agents that take over repetitive coding workflows — from code scaffolding and boilerplate generation to automated UI testing — so teams spend time on what matters.</div></div>
+    <div class="ai-card glass reveal" style="transition-delay:.07s"><div class="ai-icon">🧪</div><div class="ai-title">Experimenting with AI-First Development</div><div class="ai-desc">Exploring AI-first methodologies where intelligence is embedded into the development lifecycle itself — using LLMs to assist architecture decisions, code reviews, and adaptive interface generation.</div></div>
+    <div class="ai-card glass reveal" style="transition-delay:.14s"><div class="ai-icon">🧠</div><div class="ai-title">Agentic AI Systems</div><div class="ai-desc">Designing multi-step agentic systems that reason, plan, and act autonomously — integrating tool use, memory, and contextual decision-making to solve complex, multi-stage real-world tasks.</div></div>
+    <div class="ai-card glass reveal" style="transition-delay:.21s"><div class="ai-icon">🔗</div><div class="ai-title">RAG &amp; Knowledge Pipelines</div><div class="ai-desc">Building Retrieval-Augmented Generation pipelines that connect LLMs to structured and unstructured data sources — enabling contextually accurate, domain-specific AI responses at scale.</div></div>
+    <div class="ai-card glass reveal" style="transition-delay:.28s"><div class="ai-icon">📊</div><div class="ai-title">AI-Driven Product Analysis</div><div class="ai-desc">Applying AI to full product analysis cycles — from requirement gathering and user behaviour analysis to feature prioritisation and performance monitoring — delivering data-informed product decisions E2E.</div></div>
+    <div class="ai-card glass reveal" style="transition-delay:.35s"><div class="ai-icon">⚙️</div><div class="ai-title">LLM-Powered Automation</div><div class="ai-desc">Integrating large language models into production workflows to automate documentation, test generation, code refactoring suggestions, and developer tooling — reducing overhead without sacrificing quality.</div></div>
+  </div>
+</section>
+
+<!-- COMPETENCIES -->
+<section id="competencies">
+  <div class="section-label">Core Competencies</div>
+  <h2 class="section-title" style="margin-bottom:2rem">What I <em>Bring</em></h2>
+  <div class="comp-scroll reveal">
+    <div class="comp-pill"><div class="comp-pill-dot"></div>E2E Product Development</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Agentic AI Design</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>LLM Integration &amp; Prompt Engineering</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>RAG Pipeline Architecture</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Full-Stack Engineering</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Data Visualisation</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>API &amp; GraphQL Integration</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>AI-Driven Product Analysis</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Performance Optimisation</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Reusable Component Libraries</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Agile &amp; SSDLC</div>
+    <div class="comp-pill"><div class="comp-pill-dot"></div>Independent Product Delivery</div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section" style="padding-top:2rem">
+  <div class="section-label">Career</div>
+  <h2 class="section-title">Work <em>Experience</em></h2>
+  <div class="exp-timeline">
+
+    <div class="exp-node reveal">
+      <div class="exp-card glass">
+        <div class="exp-top">
+          <span class="exp-company">Orion Knowledge Hub</span>
+          <span class="exp-badge" style="background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(80,227,194,.1));border:1px solid rgba(167,139,250,.4);color:var(--purple);">✦ Own Product</span>
+        </div>
+        <div class="exp-role-line">Founder &amp; Solo Developer — AI Knowledge Platform</div>
+        <ul class="exp-points">
+          <li>Conceived, designed, and independently built Orion Knowledge Hub — a fully AI-based knowledge extraction and Q&amp;A platform — from zero to production.</li>
+          <li>Architected a RAG (Retrieval-Augmented Generation) pipeline enabling the platform to train on uploaded content and deliver contextually accurate, natural-language answers.</li>
+          <li>Built the professional use case: users upload meeting transcripts, Orion trains on the session's knowledge, and surfaces answers, summaries, and action-item notes on demand.</li>
+          <li>Built the student use case: pre-loaded educational content is transformed into an intelligent study companion capable of answering curriculum questions and summarising concepts.</li>
+          <li>Handled the entire product lifecycle — architecture, LLM integration, front-end, API design, deployment, and iteration — demonstrating full E2E product delivery capability.</li>
+        </ul>
+        <div class="exp-highlights">
+          <span class="chip chip-purple">LLM Integration</span><span class="chip chip-purple">RAG Pipeline</span><span class="chip chip-purple">Knowledge Extraction</span><span class="chip chip-cyan">Q&amp;A Engine</span><span class="chip chip-blue">React</span><span class="chip chip-gold">API Design</span><span class="chip chip-soft">E2E Delivery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-node reveal" style="transition-delay:.1s">
+      <div class="exp-card glass">
+        <div class="exp-top">
+          <span class="exp-company">Helius Technologies</span>
+          <span class="exp-badge badge-active">Full-Time</span>
+        </div>
+        <div class="exp-role-line">UI Developer — DBS Tech (Contractor) <span>Jul 2022 – Dec 2025</span></div>
+        <ul class="exp-points">
+          <li>Operated as an E2E product contributor — involved from requirement analysis and architecture decisions through to implementation, testing, and production delivery across multiple enterprise products.</li>
+          <li>Led design and development of user-facing web applications using Angular, React, and TypeScript, driving complete product ownership rather than isolated feature development.</li>
+          <li>Developed and maintained a library of reusable UI components, reducing development time by approximately 50% and maintaining design consistency across the product suite.</li>
+          <li>Integrated sophisticated charting libraries — D3.js, Chart.js, ECharts, AmCharts — building dynamic, data-driven dashboards powering business intelligence and data-informed decisions.</li>
+          <li>Implemented OOP-based front-end architecture with seamless GraphQL and RESTful API integration, ensuring efficient, scalable data flows across the application layer.</li>
+          <li>Applied performance engineering practices — code splitting, lazy loading, image optimisation — to measurably improve responsiveness and core web vitals.</li>
+          <li>Built AI agents to make development easier and automate repetitive tasks; actively experimented with LLM-assisted code generation and intelligent UI test automation.</li>
+          <li>Collaborated with product managers, designers, and backend engineers to shape product roadmaps and translate strategic goals into shipped features.</li>
+          <li>Actively participated in Agile sprints and Secure Software Development Life Cycle (SSDLC) processes.</li>
+        </ul>
+        <div class="exp-highlights">
+          <span class="chip chip-blue">Angular</span><span class="chip chip-blue">React</span><span class="chip chip-blue">TypeScript</span><span class="chip chip-purple">Agentic AI</span><span class="chip chip-cyan">D3.js</span><span class="chip chip-cyan">Chart.js</span><span class="chip chip-gold">GraphQL</span><span class="chip chip-soft">Product Ownership</span><span class="chip chip-soft">Agile / SSDLC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-node reveal" style="transition-delay:.2s">
+      <div class="exp-card glass">
+        <div class="exp-top">
+          <span class="exp-company">Truprojects</span>
+          <span class="exp-badge badge-intern">Internship</span>
+        </div>
+        <div class="exp-role-line">Data Analyst Intern</div>
+        <ul class="exp-points">
+          <li>Conducted data analysis evaluating the impact of COVID-19 vaccination on public health outcomes, delivering actionable insights from complex real-world datasets.</li>
+        </ul>
+        <div class="exp-highlights">
+          <span class="chip chip-soft">Data Analysis</span><span class="chip chip-soft">Public Health</span><span class="chip chip-soft">Research</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="section">
+  <div class="section-label">Recognition</div>
+  <h2 class="section-title">Key <em>Achievements</em></h2>
+  <div class="ach-grid">
+    <div class="ach-card glass reveal" style="transition-delay:0s"><div class="ach-icon">🔭</div><div class="ach-title">Built Orion Knowledge Hub</div><div class="ach-desc">Independently conceived and delivered a fully AI-based knowledge platform — end-to-end — demonstrating complete product engineering capability powered by LLMs and RAG.</div></div>
+    <div class="ach-card glass reveal" style="transition-delay:.07s"><div class="ach-icon">🤖</div><div class="ach-title">Generative AI Workshop</div><div class="ach-desc">Completed an advanced Generative AI workshop, deepening expertise in LLMs, agentic systems, and practical AI application in real-world software development.</div></div>
+    <div class="ach-card glass reveal" style="transition-delay:.14s"><div class="ach-icon">⚡</div><div class="ach-title">50% Dev Time Reduction</div><div class="ach-desc">Developed a reusable component library that cut development time by ~50% across multiple projects, enabling faster product delivery and consistent quality at scale.</div></div>
+    <div class="ach-card glass reveal" style="transition-delay:.21s"><div class="ach-icon">🥇</div><div class="ach-title">1st Place — IoT Project</div><div class="ach-desc">Secured 1st place for an Anti-Sleep Alarm System IoT project in college — demonstrating innovative engineering, rapid prototyping, and E2E hardware-software integration.</div></div>
+    <div class="ach-card glass reveal" style="transition-delay:.28s"><div class="ach-icon">🏆</div><div class="ach-title">Management Commendation</div><div class="ach-desc">Received formal commendations from leadership for outstanding contributions to product efficiency, proactive problem-solving, and consistently delivering beyond expectations.</div></div>
+    <div class="ach-card glass reveal" style="transition-delay:.35s"><div class="ach-icon">📊</div><div class="ach-title">AI-Driven Data Viz Impact</div><div class="ach-desc">Delivered advanced AI-integrated data visualisation dashboards that measurably increased user engagement and enabled teams to make faster, data-informed product decisions.</div></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="section">
+  <div class="section-label">Academia</div>
+  <h2 class="section-title"><em>Education</em> &amp; Background</h2>
+  <div class="edu-grid">
+    <div class="edu-card glass reveal"><div class="edu-degree">Bachelor of Technology in Computer Science</div><div class="edu-school">Avanthi Institute of Engineering &amp; Technology, Visakhapatnam</div><div class="edu-year">2019 – 2022</div></div>
+    <div class="edu-card glass reveal" style="transition-delay:.1s"><div class="edu-degree">Diploma in Computer Engineering</div><div class="edu-school">Government Polytechnic College, Anakapalli, Visakhapatnam</div><div class="edu-year">2014 – 2017</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-card glass-deep reveal">
+    <div class="contact-heading">Let's Build Together</div>
+    <p class="contact-sub">Whether it's an AI product, full-stack application, or a freelance collaboration — I bring E2E ownership from architecture to delivery. Let's create something intelligent.</p>
+    <div class="contact-links">
+      <a class="contact-link" href="tel:+917330713496">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        +91 7330713496
+      </a>
+      <a class="contact-link" href="mailto:jvsviswanadh@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        jvsviswanadh@gmail.com
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/viswanadh-jvs-42340614b/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2025 Viswanadh JVS — AI-Focused E2E Developer</span>
+  <span class="footer-text">Visakhapatnam, Andhra Pradesh, India</span>
+</footer>
+
+<script>
+  // ── Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const d = parseFloat(e.target.style.transitionDelay || '0') * 1000;
+        setTimeout(() => e.target.classList.add('in'), d);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── Parallax orbs
+  const orbs = document.querySelectorAll('.orb');
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx, dy = (e.clientY - cy) / cy;
+    orbs.forEach((orb, i) => { const s = (i+1)*8; orb.style.transform = `translate(${dx*s}px,${dy*s}px)`; });
+  });
+
+  // ── Hamburger / Drawer
+  const hamburger = document.getElementById('hamburger');
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+
+  function closeDrawer() {
+    hamburger.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = drawer.classList.contains('open');
+    if (isOpen) { closeDrawer(); }
+    else {
+      hamburger.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+
+  overlay.addEventListener('click', closeDrawer);
+
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeDrawer);
+  });
+
+  // Active link highlight in drawer
+  const sections = document.querySelectorAll('section[id]');
+  const drawerLinks = drawer.querySelectorAll('a');
+  sections.forEach(s => {
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        drawerLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + s.id);
+        });
+      }
+    }, { threshold: 0.4 }).observe(s);
+  });
+
+  // ── Scroll to top
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ── Orion demo button (placeholder — update href when link is ready)
+  // To update: document.getElementById('orionDemoBtn').href = 'YOUR_GITHUB_PAGES_URL';
+</script>
+</body>
+</html>
